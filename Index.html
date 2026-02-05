@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Valentine?</title>
+  <style>
+    :root{
+      --bg1:#fff0f6;
+      --bg2:#ffe4ee;
+      --card:#ffffffcc;
+      --text:#3a1b2a;
+      --accent:#ff4d6d;
+      --accent2:#ff8fab;
+      --shadow: 0 18px 45px rgba(255, 77, 109, 0.18);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      font-family: ui-rounded, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color:var(--text);
+      background: radial-gradient(1200px 800px at 30% 20%, var(--bg2), transparent 60%),
+                  radial-gradient(1000px 700px at 70% 70%, #ffd6e7, transparent 60%),
+                  linear-gradient(135deg, var(--bg1), #fff);
+      overflow:hidden;
+    }
+
+    /* Floating hearts */
+    .heart{
+      position:absolute;
+      font-size:18px;
+      opacity:.35;
+      animation: floatUp linear infinite;
+      filter: drop-shadow(0 6px 10px rgba(255,77,109,.25));
+      user-select:none;
+      pointer-events:none;
+    }
+    @keyframes floatUp{
+      from{ transform: translateY(30vh) translateX(0) rotate(0deg); }
+      to  { transform: translateY(-120vh) translateX(80px) rotate(360deg); }
+    }
+
+    .card{
+      width:min(640px, 92vw);
+      background:var(--card);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 77, 109, .18);
+      border-radius: 26px;
+      box-shadow: var(--shadow);
+      padding: 34px 26px 28px;
+      text-align:center;
+      position:relative;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 8px 14px;
+      border-radius:999px;
+      background: rgba(255,77,109,.12);
+      border: 1px solid rgba(255,77,109,.18);
+      font-weight: 700;
+      letter-spacing:.2px;
+      margin-bottom: 14px;
+    }
+
+    h1{
+      margin: 10px 0 10px;
+      font-size: clamp(28px, 4.2vw, 44px);
+      line-height: 1.1;
+    }
+    .sub{
+      margin: 0 auto 18px;
+      max-width: 46ch;
+      font-size: clamp(14px, 2.3vw, 17px);
+      opacity:.9;
+    }
+
+    .cute{
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      margin: 10px 0 24px;
+      flex-wrap:wrap;
+      opacity:.95;
+    }
+    .pill{
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px dashed rgba(255,77,109,.35);
+      background: rgba(255,255,255,.6);
+      font-size: 13px;
+    }
+
+    .btnrow{
+      display:flex;
+      justify-content:center;
+      gap:14px;
+      margin-top: 6px;
+      position:relative;
+      height: 56px;
+    }
+
+    button{
+      border:none;
+      border-radius: 16px;
+      padding: 14px 18px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor:pointer;
+      transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+      box-shadow: 0 14px 22px rgba(0,0,0,.08);
+    }
+    button:active{ transform: translateY(2px) scale(.99); }
+
+    .yes{
+      background: linear-gradient(135deg, var(--accent), #ff6b8a);
+      color:white;
+      min-width: 170px;
+    }
+    .yes:hover{ filter: brightness(1.04); }
+
+    .no{
+      background: white;
+      border: 1px solid rgba(58,27,42,.18);
+      color: var(--text);
+      min-width: 130px;
+      position:absolute;
+      right: 0;
+    }
+
+    .result{
+      display:none;
+      margin-top: 18px;
+      padding: 14px 14px;
+      border-radius: 18px;
+      background: rgba(255, 77, 109, .10);
+      border: 1px solid rgba(255, 77, 109, .18);
+      font-weight: 750;
+    }
+
+    .footer{
+      margin-top: 18px;
+      font-size: 12px;
+      opacity:.65;
+    }
+
+    /* Confetti */
+    canvas{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      border-radius: 26px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- floating hearts -->
+  <div id="hearts"></div>
+
+  <div class="card" id="card">
+    <canvas id="confetti"></canvas>
+
+    <div class="badge">💌 Valentine Proposal</div>
+    <h1>Jiya, will you be my Valentine? 💖</h1>
+    <p class="sub">
+      I’m officially asking… with maximum cuteness and minimal embarrassment.
+      (But like… I’m very serious 😌)
+    </p>
+
+    <div class="cute">
+      <div class="pill">🍓 sweet like you</div>
+      <div class="pill">🌹 date? (your pick)</div>
+      <div class="pill">🧸 hugs included</div>
+      <div class="pill">✨ 100% good vibes</div>
+    </div>
+
+    <div class="btnrow" id="btnrow">
+      <button class="yes" id="yesBtn">Yes 💘</button>
+      <button class="no" id="noBtn">No 🙃</button>
+    </div>
+
+    <div class="result" id="result">
+      YAYYYYY 😭💗 You just made me the happiest person.
+      <div style="margin-top:8px;font-weight:700;opacity:.9;">Text me: “Valentine accepted ✅”</div>
+    </div>
+
+    <div class="footer">made with love + a little chaos 💞</div>
+  </div>
+
+  <script>
+    // Floating hearts generator
+    const heartsWrap = document.getElementById('hearts');
+    const heartChars = ["💗","💖","💘","💕","💞","💓","🌹","✨"];
+    for (let i=0; i<28; i++){
+      const s = document.createElement('div');
+      s.className = 'heart';
+      s.textContent = heartChars[Math.floor(Math.random()*heartChars.length)];
+      const left = Math.random()*100;
+      const dur = 8 + Math.random()*10;
+      const delay = Math.random()*6;
+      const size = 14 + Math.random()*18;
+      s.style.left = left + 'vw';
+      s.style.animationDuration = dur + 's';
+      s.style.animationDelay = delay + 's';
+      s.style.fontSize = size + 'px';
+      heartsWrap.appendChild(s);
+    }
+
+    // Button behavior
+    const noBtn = document.getElementById('noBtn');
+    const yesBtn = document.getElementById('yesBtn');
+    const btnrow = document.getElementById('btnrow');
+    const result = document.getElementById('result');
+
+    let noCount = 0;
+
+    function moveNo(){
+      noCount++;
+      const rowRect = btnrow.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+
+      const maxX = rowRect.width - btnRect.width;
+      const maxY = rowRect.height - btnRect.height;
+
+      const x = Math.max(0, Math.min(maxX, Math.random() * maxX));
+      const y = Math.max(0, Math.min(maxY, Math.random() * maxY));
+
+      noBtn.style.right = 'auto';
+      noBtn.style.left = x + 'px';
+      noBtn.style.top = y + 'px';
+
+      // After a few tries, gently give up 😭
+      if (noCount === 3) noBtn.textContent = "Wait… no? 😳";
+      if (noCount === 5) noBtn.textContent = "Be nice pls 🥺";
+      if (noCount >= 7) {
+        noBtn.textContent = "Okay fine, Yes 😭";
+        noBtn.classList.remove('no');
+        noBtn.classList.add('yes');
+        noBtn.onclick = () => yesBtn.click();
+        noBtn.onmouseenter = null;
+      }
+    }
+
+    noBtn.onmouseenter = moveNo;
+    noBtn.onclick = moveNo;
+
+    // Confetti
+    const canvas = document.getElementById("confetti");
+    const card = document.getElementById("card");
+    const ctx = canvas.getContext("2d");
+
+    function resizeCanvas(){
+      const r = card.getBoundingClientRect();
+      canvas.width = Math.floor(r.width);
+      canvas.height = Math.floor(r.height);
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    function popConfetti(){
+      resizeCanvas();
+      const pieces = [];
+      const N = 160;
+      for (let i=0;i<N;i++){
+        pieces.push({
+          x: canvas.width/2,
+          y: canvas.height/3,
+          vx: (Math.random()-0.5)*10,
+          vy: (Math.random()-1.2)*10,
+          g: 0.22 + Math.random()*0.16,
+          r: 3 + Math.random()*4,
+          a: 1,
+          rot: Math.random()*Math.PI,
+          vr: (Math.random()-0.5)*0.3,
+          ch: Math.random() < 0.25 ? "💖" : null
+        });
+      }
+      let t = 0;
+      function frame(){
+        t++;
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        pieces.forEach(p=>{
+          p.vy += p.g;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.vr;
+          p.a *= 0.992;
+
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, p.a);
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+
+          if (p.ch){
+            ctx.font = `${Math.floor(14 + p.r*2)}px system-ui`;
+            ctx.fillText(p.ch, -6, 6);
+          } else {
+            // simple confetti rectangles (no fixed colors; use default black with alpha)
+            // to keep it cute, draw tiny rounded-ish rectangles via rect
+            ctx.fillRect(-p.r, -p.r, p.r*2, p.r*2);
+          }
+
+          ctx.restore();
+        });
+
+        if (t < 170) requestAnimationFrame(frame);
+        else ctx.clearRect(0,0,canvas.width,canvas.height);
+      }
+      frame();
+    }
+
+    yesBtn.addEventListener("click", ()=>{
+      result.style.display = "block";
+      popConfetti();
+      yesBtn.textContent = "Yay!! 💞";
+      yesBtn.disabled = true;
+      noBtn.style.display = "none";
+    });
+  </script>
+</body>
+</html>
